@@ -14,6 +14,7 @@ A high-performance, production-ready URL shortener service built with Go, featur
 - **Robust Persistence**: Stores all URL mappings in MongoDB.
 - **Clean Architecture**: Modular code structure for easy maintenance and scalability.
 - **Validation**: Ensures only valid URLs are shortened.
+- **Rate Limiting**: Protects the API using a Redis-backed Token Bucket algorithm (per IP).
 
 ## 🛠️ Tech Stack
 
@@ -33,6 +34,7 @@ A high-performance, production-ready URL shortener service built with Go, featur
 │   └── config.go         # Database & Cache connections
 ├── internal/
 │   ├── handler/          # HTTP request handlers
+│   ├── middleware/       # Custom middleware (Token Bucket Limiter)
 │   ├── model/            # Data models
 │   ├── repository/       # Data access layer (MongoDB)
 │   ├── service/          # Business logic layer
@@ -101,6 +103,14 @@ curl -X POST http://localhost:9002/shorten \
 
 **Example:**
 Just open `http://localhost:9002/NjAzNzg` in your browser.
+
+---
+
+### 3. Rate Limiting
+The API is protected by a custom Redis-backed **Token Bucket** rate limiter middleware.
+- **Limit**: 10 tokens per IP.
+- **Refill Rate**: 1 token per second.
+- **Behavior**: Returns `429 Too Many Requests` if the limit is exceeded.
 
 ---
 
