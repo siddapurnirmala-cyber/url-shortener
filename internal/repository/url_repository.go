@@ -7,6 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type URLRepository struct {
@@ -20,14 +21,14 @@ func (r *URLRepository) GetNextID() (int64, error) {
 		Seq int64 `bson:"seq"`
 	}
 
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After).SetUpsert(true)
+
 	err := r.Collection.Database().Collection("counters").
 		FindOneAndUpdate(
 			context.Background(),
 			bson.M{"_id": "url_id"},
 			bson.M{"$inc": bson.M{"seq": 1}},
-			// IMPORTANT
-			// Return updated value
-			// (default is BEFORE update)
+			opts,
 		).Decode(&result)
 
 	if err != nil {

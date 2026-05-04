@@ -37,7 +37,10 @@ func (s *URLService) CreateShortURL(original string) (string, error) {
 	}
 
 	// 2. Convert to Base62
-	code := utils.Encode(id)
+	code, err := utils.Encode(id)
+	if err != nil {
+		return "", err
+	}
 
 	// 3. Store in DB
 	err = s.Repo.InsertWithCode(id, original, code)

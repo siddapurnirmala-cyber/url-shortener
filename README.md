@@ -45,11 +45,51 @@ A high-performance, production-ready URL shortener service built with Go, featur
 
 ## 🏁 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
-- Go 1.25.1+
-- MongoDB (running on `localhost:27017`)
-- Redis (running on `localhost:6379`)
+Before running the project, you need to install **Go (1.25.1+)**, **MongoDB**, and **Redis**. Here is how to set them up on your operating system:
+
+#### 🪟 Windows
+- **Go**: Download and run the installer from the [official Go website](https://go.dev/dl/).
+- **MongoDB**: Download the [MongoDB Community Server](https://www.mongodb.com/try/download/community) `.msi` installer. Install it as a Windows Service (it will run automatically on `localhost:27017`).
+- **Redis**: Redis is not officially supported natively on Windows. The best options are:
+  - **WSL2 (Recommended):** Open Ubuntu in WSL and run `sudo apt install redis-server` followed by `sudo service redis-server start`.
+  - **Docker:** Run `docker run -d -p 6379:6379 redis`.
+
+#### 🍎 macOS
+The easiest way to install the dependencies is using [Homebrew](https://brew.sh/):
+```bash
+# 1. Install Go
+brew install go
+
+# 2. Install & Start MongoDB
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
+
+# 3. Install & Start Redis
+brew install redis
+brew services start redis
+```
+
+#### 🐧 Linux (Ubuntu/Debian)
+Use the `apt` package manager:
+```bash
+# 1. Install Go
+sudo apt update
+sudo apt install golang-go  # Note: You may want to download from golang.org to get the absolute latest version
+
+# 2. Install & Start MongoDB (v7.0 Example)
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl enable --now mongod
+
+# 3. Install & Start Redis
+sudo apt install redis-server
+sudo systemctl enable --now redis-server
+```
 
 ### Installation
 
@@ -65,10 +105,51 @@ A high-performance, production-ready URL shortener service built with Go, featur
    ```
 
 3. **Run the application**
+
+   Because this project is built in Go, it works cross-platform. The server will start on `http://localhost:9002` across all systems.
+
+   **🪟 On Windows:**
+   Run directly using Command Prompt or PowerShell:
+   ```powershell
+   go run cmd\main.go
+   ```
+   *To build a native executable:*
+   ```powershell
+   go build -o url-shortener.exe cmd\main.go
+   .\url-shortener.exe
+   ```
+
+   **🍎 On macOS:**
+   Run directly from your terminal:
    ```bash
    go run cmd/main.go
    ```
-   The server will start on `http://localhost:9002`
+   *To build a native executable:*
+   ```bash
+   go build -o url-shortener cmd/main.go
+   ./url-shortener
+   ```
+
+   **🐧 On Linux:**
+   Run directly from your terminal:
+   ```bash
+   go run cmd/main.go
+   ```
+   *To build a native executable:*
+   ```bash
+   go build -o url-shortener cmd/main.go
+   ./url-shortener
+   ```
+
+   **🌍 Cross-Compilation (Bonus)**
+   Go makes it incredibly easy to build executables for other operating systems from your current machine. You can do this by setting `GOOS` and `GOARCH`:
+   ```bash
+   # Build for Linux (from Windows/Mac)
+   GOOS=linux GOARCH=amd64 go build -o url-shortener-linux cmd/main.go
+   
+   # Build for Windows (from Mac/Linux)
+   GOOS=windows GOARCH=amd64 go build -o url-shortener.exe cmd/main.go
+   ```
 
 ## 📡 API Endpoints
 

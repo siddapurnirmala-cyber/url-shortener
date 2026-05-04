@@ -25,12 +25,12 @@ func init() {
 }
 
 // Encode ID → Hashid
-func Encode(id int64) string {
+func Encode(id int64) (string, error) {
 	hash, err := hd.EncodeInt64([]int64{id})
 	if err != nil {
-		log.Fatal("Hashids encode error:", err)
+		return "", err
 	}
-	return hash
+	return hash, nil
 }
 
 // Decode (optional, useful later)
