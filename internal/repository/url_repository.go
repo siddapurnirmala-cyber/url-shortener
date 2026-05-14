@@ -14,7 +14,7 @@ type URLRepository struct {
 	Collection *mongo.Collection
 }
 
-// 🔥 Get next incremental ID
+// Get next incremental ID
 func (r *URLRepository) GetNextID() (int64, error) {
 
 	var result struct {

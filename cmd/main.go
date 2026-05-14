@@ -28,7 +28,7 @@ func main() {
 
 	handler := &handler.URLHandler{Service: service}
 
-	// 🔥 Token bucket limiter
+	// Token bucket limiter
 	tokenLimiter := &middleware.TokenBucketLimiter{
 		RDB:        rdb,
 		Ctx:        ctx,

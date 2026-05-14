@@ -30,7 +30,7 @@ func (tb *TokenBucketLimiter) Limit() gin.HandlerFunc {
 
 		now := time.Now().Unix()
 
-		// 🔥 Lua script (atomic token bucket)
+		// Lua script (atomic token bucket)
 		script := redis.NewScript(`
 local key = KEYS[1]
 local capacity = tonumber(ARGV[1])

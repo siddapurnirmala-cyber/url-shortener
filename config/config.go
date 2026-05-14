@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -29,7 +30,22 @@ func ConnectMongo() *mongo.Collection {
 
 	log.Println("✅ MongoDB connected")
 
-	return client.Database("url_shortener").Collection("urls")
+	collection := client.Database("url_shortener").Collection("urls")
+
+	// Create a unique index on short_code for fast O(log N) lookups and uniqueness constraint
+	indexModel := mongo.IndexModel{
+		Keys:    bson.D{{Key: "short_code", Value: 1}},
+		Options: options.Index().SetUnique(true),
+	}
+
+	_, err = collection.Indexes().CreateOne(context.Background(), indexModel)
+	if err != nil {
+		log.Fatal("Failed to create index:", err)
+	}
+
+	log.Println("✅ MongoDB index on short_code ensured")
+
+	return collection
 }
 
 func ConnectRedis() *redis.Client {

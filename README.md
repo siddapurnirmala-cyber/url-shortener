@@ -12,6 +12,7 @@ A high-performance, production-ready URL shortener service built with Go, featur
 - **Efficient Shortening**: Converts long URLs into short, unique codes using Hashids.
 - **Lightning Fast Redirection**: Uses Redis caching to minimize database lookups for frequent redirects.
 - **Robust Persistence**: Stores all URL mappings in MongoDB.
+- **Optimized Database Queries**: Leverages MongoDB database indexing on short codes for blazingly fast     lookup times, ensuring maximum performance at scale.
 - **Clean Architecture**: Modular code structure for easy maintenance and scalability.
 - **Validation**: Ensures only valid URLs are shortened.
 - **Rate Limiting**: Protects the API using a Redis-backed Token Bucket algorithm (per IP).
